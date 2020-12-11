@@ -9,7 +9,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    books: [Book]
+    books: [Book],
+    hello: String
   }
 
   type Mutation {
@@ -25,6 +26,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     books: () => BookController.listBooks(),
+    hello: () => "world"
   },
   Mutation: {
     async addBook(_: any, args: { title: string, author: string }, __: any) {
