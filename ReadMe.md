@@ -7,3 +7,5 @@
 - [x] Copilotによるデプロイ
 - [ ] Pubsub Postgres
 - [x] DynamoDB(copilot storagte init)との接続
+- [x] Pipeline(CI/CD)
+- [x] Subscription Channelの切り替え

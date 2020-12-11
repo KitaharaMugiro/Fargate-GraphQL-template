@@ -7,6 +7,9 @@ const typeDefs = gql`
     title: String
     author: String
   }
+  type Message {
+    message: String
+  }
 
   type Query {
     books: [Book]
@@ -14,13 +17,19 @@ const typeDefs = gql`
 
   type Mutation {
     addBook(title:String, author:String) : Book
+    addMessage(roomId:ID!, message:String) : Message
   }
 
   type Subscription {
     books: [Book]
+    messages(roomId: ID!) : [Message]
   }
 `;
 
+const rooms = [
+  { roomId: "0", messages: [] },
+  { roomId: "1", messages: [] },
+]
 
 const resolvers = {
   Query: {
@@ -32,11 +41,23 @@ const resolvers = {
       pubsub.publish("BOOK_ADDED", { books: BookController.listBooks() });
       return args
     },
+    async addMessage(_: any, args: { roomId: string, message: string }, __: any) {
+      const room = rooms.find(r => r.roomId === args.roomId)
+      room.messages.push({ message: args.message })
+      pubsub.publish("MESSAGE_ADDED" + args.roomId, { messages: room.messages });
+      return args
+    }
   },
   Subscription: {
     books: {
       subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"])
     },
+    messages: {
+      subscribe: (parent, args, context, info) => {
+        console.log(args)
+        return pubsub.asyncIterator("MESSAGE_ADDED" + args.roomId)
+      }
+    }
   },
 };
 
