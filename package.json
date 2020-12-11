@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "deploy": "copilot svc deploy",
-    "local": "docker run --name subscription-test -p 4000:4000 subscription-test"
+    "local": "docker run -p 4000:4000 subscription-test"
   },
   "keywords": [],
   "author": "",
