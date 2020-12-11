@@ -1,20 +1,14 @@
-export type Book = {
-    title: string
-    author: string
-}
+import { BookModel } from "./BookModel"
+import { BookRepository } from "./BookRepository"
 
-const books = [
-    {
-        title: 'タイトル',
-        author: '著者',
-    },
-];
 
 export const BookController = {
-    addBook: (book: Book) => {
-        books.push(book)
+    addBook: async (book: { title: string, author: string }) => {
+        const bookModel = new BookModel()
+        bookModel.create(book.title, book.author)
+        await BookRepository.add(bookModel)
     },
     listBooks: () => {
-        return books
+        return BookRepository.list()
     }
 }

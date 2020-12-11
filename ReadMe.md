@@ -6,4 +6,4 @@
 - [x] Apollo Server(Query, Mutation, Subscription)
 - [x] Copilotによるデプロイ
 - [ ] Pubsub Postgres
-- [x] DynamoDB(copilot storagte init)
+- [x] DynamoDB(copilot storagte init)との接続

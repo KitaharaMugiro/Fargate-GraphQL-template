@@ -27,8 +27,8 @@ const resolvers = {
     books: () => BookController.listBooks(),
   },
   Mutation: {
-    addBook(_: any, args: { title: string, author: string }, __: any) {
-      BookController.addBook(args)
+    async addBook(_: any, args: { title: string, author: string }, __: any) {
+      await BookController.addBook(args)
       pubsub.publish("BOOK_ADDED", { books: BookController.listBooks() });
       return args
     },
