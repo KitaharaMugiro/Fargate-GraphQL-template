@@ -26,7 +26,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     books: () => BookController.listBooks(),
-    hello: () => "world"
+    hello: () => "世界"
   },
   Mutation: {
     async addBook(_: any, args: { title: string, author: string }, __: any) {
