@@ -1,4 +1,5 @@
 import { ApolloServer, gql, PubSub } from 'apollo-server';
+import { BookController } from './BookController';
 
 const pubsub = new PubSub();
 const typeDefs = gql`
@@ -20,21 +21,15 @@ const typeDefs = gql`
   }
 `;
 
-const books = [
-  {
-    title: 'タイトル',
-    author: '著者',
-  },
-];
 
 const resolvers = {
   Query: {
-    books: () => books,
+    books: () => BookController.listBooks(),
   },
   Mutation: {
     addBook(_: any, args: { title: string, author: string }, __: any) {
-      books.push(args)
-      pubsub.publish("BOOK_ADDED", { books: books });
+      BookController.addBook(args)
+      pubsub.publish("BOOK_ADDED", { books: BookController.listBooks() });
       return args
     },
   },
