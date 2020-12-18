@@ -1,8 +1,8 @@
 import * as AWS from 'aws-sdk';
-import { BookModel } from './BookModel';
-import { DynamoSchema } from './DynamoSchema';
-import { ModelFactory } from './ModelFactory';
-import { KeyGenarator, ModelScrap } from './ModelScrap';
+import { BookModel } from '../model/BookModel';
+import { DynamoSchema } from '../dynamo/DynamoSchema';
+import { ModelFactory } from '../dynamo/ModelFactory';
+import { KeyGenarator, ModelScrap } from '../dynamo/ModelScrap';
 
 const TABLE_NAME = "subscription-api-test-subscription-api-subscription-api" //うーん、環境変数から呼べないかな
 AWS.config.update({ region: 'ap-northeast-1' });

@@ -1,4 +1,4 @@
-import { BookModel } from "./BookModel";
+import { BookModel } from "../model/BookModel";
 import { DynamoSchema } from "./DynamoSchema";
 
 export const KeyGenarator = {

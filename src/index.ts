@@ -1,5 +1,6 @@
 import { ApolloServer, gql, PubSub } from 'apollo-server';
-import { BookController } from './BookController';
+import { BookController } from './controller/BookController';
+import { v4 as uuidv4 } from 'uuid';
 
 const pubsub = new PubSub();
 const typeDefs = gql`
@@ -7,7 +8,9 @@ const typeDefs = gql`
     title: String
     author: String
   }
+
   type Message {
+    messageId: ID
     message: String
   }
 
@@ -17,19 +20,15 @@ const typeDefs = gql`
 
   type Mutation {
     addBook(title:String, author:String) : Book
-    addMessage(roomId:ID!, message:String) : Message
+    addMessage(message:String) : Message
   }
 
   type Subscription {
     books: [Book]
-    messages(roomId: ID!) : [Message]
+    newMessage: Message
   }
 `;
 
-const rooms = [
-  { roomId: "0", messages: [] },
-  { roomId: "1", messages: [] },
-]
 
 const resolvers = {
   Query: {
@@ -41,10 +40,9 @@ const resolvers = {
       pubsub.publish("BOOK_ADDED", { books: BookController.listBooks() });
       return args
     },
-    async addMessage(_: any, args: { roomId: string, message: string }, __: any) {
-      const room = rooms.find(r => r.roomId === args.roomId)
-      room.messages.push({ message: args.message })
-      pubsub.publish("MESSAGE_ADDED" + args.roomId, { messages: room.messages });
+    async addMessage(_: any, args: { message: string }, __: any) {
+      const messageId = uuidv4()
+      pubsub.publish("MESSAGE_ADDED", { newMessage: { messageId, message: args.message } });
       return args
     }
   },
@@ -52,10 +50,9 @@ const resolvers = {
     books: {
       subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"])
     },
-    messages: {
+    newMessage: {
       subscribe: (parent, args, context, info) => {
-        console.log(args)
-        return pubsub.asyncIterator("MESSAGE_ADDED" + args.roomId)
+        return pubsub.asyncIterator("MESSAGE_ADDED")
       }
     }
   },

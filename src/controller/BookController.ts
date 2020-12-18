@@ -1,5 +1,5 @@
-import { BookModel } from "./BookModel"
-import { BookRepository } from "./BookRepository"
+import { BookModel } from "../model/BookModel"
+import { BookRepository } from "../repository/BookRepository"
 
 
 export const BookController = {
